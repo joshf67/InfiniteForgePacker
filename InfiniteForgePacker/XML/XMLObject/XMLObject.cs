@@ -15,6 +15,9 @@ public class XMLObject
 
     public static XMLObject? GenerateObjectFromXML(XContainer objectContainer)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to create XMLObject from XML");
+        
         var isStatic = false; //Temporary for now until we can determine what makes an object static in XML
         var id = ReadObjectId(objectContainer);
         var position = ReadObjectPosition(objectContainer);
@@ -26,6 +29,9 @@ public class XMLObject
 
     public static int ReadObjectId(XContainer objectContainer)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to read object id");
+        
         var id = XMLReader.GetXContainer(objectContainer, "struct", 2);
         if (id is null)
             return -1;
@@ -35,6 +41,9 @@ public class XMLObject
 
     public static Vector3 ReadObjectPosition(XContainer objectContainer)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to read object position");
+        
         var position = XMLReader.GetXContainer(objectContainer, "struct", 3);
         if (position is null)
             return Vector3.Zero;
@@ -49,6 +58,9 @@ public class XMLObject
 
     public static (Vector3 Forward, Vector3 Up, Vector3 Degrees) ReadObjectRotation(XContainer objectContainer)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to read object rotation");
+        
         var objectUpRotationContainer = XMLReader.GetXContainer(objectContainer, "struct", 4);
         var objectForwardRotationContainer = XMLReader.GetXContainer(objectContainer, "struct", 5);
 
@@ -79,11 +91,17 @@ public class XMLObject
 
     public static XElement? ReadObjectAdditionalData(XContainer objectContainer, bool createIfNull = false, bool clearOnFind = false)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to read object additional data");
+        
         return XMLReader.GetXContainer(objectContainer, "struct", 8, createIfNull: createIfNull, clearOnFind: clearOnFind);
     }
     
     public static Vector3 ReadObjectScale(XContainer objectContainer)
     {
+        if (objectContainer is null)
+            throw new Exception("Invalid object container when trying to read object scale");
+        
         var position = XMLReader.GetXContainer(objectContainer, "struct", 3);
         if (position is null)
             return Vector3.One;
@@ -98,10 +116,13 @@ public class XMLObject
 
     public static List<(XElement Element, int ObjectId)>? ReturnObjectsOfIds(XDocument document, int id = -1)
     {
-        XContainer objectList = XMLHelper.GetObjectList(document);
+        if (document is null)
+            throw new Exception("Invalid document when trying to return all objects");
         
+        XContainer objectList = XMLHelper.GetObjectList(document);
+
         if (objectList is null)
-            throw new Exception($"Document does not have a valid object list {document}");
+            return null;
 
         if (id == -1)
             //Converts all elements into tuple format
@@ -117,14 +138,34 @@ public class XMLObject
         return ret;
     }
 
+    public void WriteObject(XContainer container, XDocument? document = null)
+    {
+        if (container is null)
+            throw new Exception("Invalid object container when trying to write object");
+
+        WriteObjectId(container);
+        WriteObjectPosition(container);
+        WriteObjectRotation(container);
+        WriteObjectScale(container);
+        
+        if (document is not null)
+            WriteObjectSpecifics(document, container);
+    }
+    
     public void WriteObjectId(XContainer container)
     {
+        if (container is null)
+            throw new Exception("Invalid object container when trying to write object id");
+        
         var objectIdContainer = XMLReader.GetXContainer(container, "struct", 2, createIfNull: true, clearOnFind: true);
         XMLWriter.WriteObjectToContainer(objectIdContainer, GameObject.ObjectId, 0);
     }
 
     public void WriteObjectPosition(XContainer container)
     {
+        if (container is null)
+            throw new Exception("Invalid object container when trying to write object position");
+        
         var objectPositionContainer =
             XMLReader.GetXContainer(container, "struct", 3, createIfNull: true, clearOnFind: true);
 
@@ -135,6 +176,9 @@ public class XMLObject
 
     public void WriteObjectRotation(XContainer container)
     {
+        if (container is null)
+            throw new Exception("Invalid object container when trying to write object rotation");
+        
         var objectUpRotationContainer =
             XMLReader.GetXContainer(container, "struct", 4, createIfNull: true, clearOnFind: true);
         
@@ -154,6 +198,9 @@ public class XMLObject
     
     public void WriteObjectScale(XContainer container)
     {
+        if (container is null)
+            throw new Exception("Invalid object container when trying to write object scale");
+        
         var objectDataScaleList =
             XMLReader.GetXContainer(ReadObjectAdditionalData(container, true, true),
                 "list", 23, "struct", createIfNull: true, clearOnFind: true);
@@ -180,7 +227,7 @@ public class XMLObject
         // XMLWriter.WriteObjectToContainer(randomStruct, 2, 1);
     }
 
-    public virtual void WriteObjectSpecifics(XDocument document, XContainer? objectContainer = null)
+    public virtual void WriteObjectSpecifics(XDocument? document = null, XContainer? objectContainer = null)
     {
         
     }
