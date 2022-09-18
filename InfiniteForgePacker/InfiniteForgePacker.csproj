@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Bond.Core.CSharp" Version="10.0.0" />
+      <PackageReference Include="Bond.CSharp" Version="10.0.0" />
+      <PackageReference Include="Bond.Runtime.CSharp" Version="10.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <BondCodegen Remove="Game\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Game\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Game\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Game\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="InfiniteForgeConstants">
+        <HintPath>InfiniteForgeConstants.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

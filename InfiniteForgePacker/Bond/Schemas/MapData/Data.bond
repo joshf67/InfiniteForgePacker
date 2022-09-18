@@ -1,0 +1,98 @@
+﻿import "./Options.bond"
+namespace Schemas.MapData
+
+struct Unknown33Struct
+{
+
+}
+
+struct Unknown32Struct
+{
+
+}
+
+struct Unknown31Struct
+{
+
+}
+
+struct Unknown30Struct
+{
+
+}
+
+struct Unknown29Struct
+{
+    0: optional int32 unknown1;
+}
+
+struct Unknown28Struct
+{
+    0: optional int32 unknown1;
+}
+
+struct Unknown24Struct
+{
+
+}
+
+struct Unknown21Struct
+{
+
+}
+
+struct Unknown1List
+{
+    0: required bool unknownBool1;
+    1: required list<int32> unknownList1;
+}
+
+struct UnknownBlob
+{
+    0: optional uint8 blobData;
+}
+
+struct Unknown1StructStruct
+{
+    1: optional list<Unknown1List> unknown1List;
+}
+
+struct Unknown1Struct
+{
+    1: optional Unknown1StructStruct unknown1StructStruct;
+}
+
+struct ScreenEffectStruct
+{
+    0: int32 effectId;
+}
+
+struct MapId
+{
+    0: required int32 Id;
+}
+
+struct Container
+{
+    0: required MapId mapId;
+    1: optional Unknown1Struct unknown1;
+    3: optional int32 unknown3;
+    4: optional int32 unknown4;
+    
+    21: optional Unknown21Struct unknown21;
+    24: optional list<Unknown24Struct> unknown24;
+    
+    25: optional bool decorator;
+    
+    28: optional Unknown28Struct unknown28;
+    29: optional Unknown29Struct unknown29;
+    
+    30: optional Unknown30Struct unknown30;
+    31: optional Unknown31Struct unknown31;
+    32: optional Unknown32Struct unknown32;
+    33: optional Unknown33Struct unknown33;
+    
+    34: optional ScreenEffectStruct screenEffect;
+    39: optional Schema.MapData.Options.Container mapOptionsStruct;
+    
+}

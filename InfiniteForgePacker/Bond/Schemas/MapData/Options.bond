@@ -1,0 +1,107 @@
+namespace Schema.MapData.Options
+
+struct AmbientSoundStruct3
+{
+    0: optional int32 sound;
+}
+
+struct AmbientSoundStruct2
+{
+    0: optional int32 sound;
+}
+
+struct AmbientSoundStruct1
+{
+    0: optional int32 sound;
+}
+
+struct AmbientSoundStruct0
+{
+    0: optional int32 sound;
+}
+
+struct AmbientSoundStruct
+{
+    0: optional AmbientSoundStruct0 primarySound;
+    1: optional AmbientSoundStruct1 secondarySound;
+    2: optional AmbientSoundStruct2 reverbSound;
+    3: optional AmbientSoundStruct3 audioEffect;
+    4: optional bool enablePreview;
+    5: optional bool unknown5;
+}
+
+struct WindDirection
+{
+    0: optional float yaw;
+    1: optional float pitch;
+    2: optional float unknown2;
+}
+
+struct SunlightRotation
+{
+    0: optional float yaw;
+    1: optional float pitch;
+}
+
+struct Container
+{
+    0: optional float sunlightIntensity;
+    1: optional int32 sunlightColorOverride;
+    2: optional SunlightRotation sunlightRotation;
+    
+    3: optional float lightBounceIntensity;
+    4: optional int32 lightBounceTintOverride;
+    
+    5: optional float skyLightIntensity;
+    6: optional int32 skyLightTintOverride;
+    
+    7: optional list<int32> directionalSkylight;
+    
+    9: optional WindDirection windDirection;
+    10: optional float windSpeed;
+    
+    11: optional set<int32> unknown11;
+    12: optional set<int32> unknown12;
+    
+    13: optional bool volumetricFogEnabled;
+    14: optional float volumetricFogDensity;
+    15: optional int32 volumetricFogColor;
+    16: optional float volumetricFogNearRange;
+    17: optional float volumetricFogFarRange;
+    
+    18: optional int32 unknown18;
+    19: optional int32 unknown19;
+    20: optional int32 unknown20;
+    
+    21: optional list<int32> unknown21;
+    22: optional int32 unknown22;
+    
+    23: optional float skyIntensity;
+    24: optional float sunIntensity;
+    25: optional int32 skyTint;
+    
+    26: optional int32 unknown26;
+    
+    27: optional float skyTintIntensity;
+    28: optional int32 sunTint;
+    
+    29: optional int32 unknown29;
+    
+    30: optional float sunTintIntensity;
+    31: optional float atmosphericFogOffset;
+    32: optional float atmosphericFogFalloff;
+    33: optional float atmosphericFogIntensity;
+    34: optional float atmosphericFogDepthScale;
+    35: optional float atmosphericFogFalloffUp;
+    36: optional float atmosphericFogFalloffDown;
+    37: optional float atmosphericFogSkyIntensity;
+    38: optional float atmosphericFogInscattering;
+    39: optional float atmosphericFogFakeInscattering;
+    40: optional float unknown40;
+    
+    41: optional AmbientSoundStruct ambientSoundStruct;
+    
+    //44: optional map<uint16, unit16> unknown44;
+    
+    47: optional list<int32> unknown47;
+}

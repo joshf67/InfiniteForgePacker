@@ -1,0 +1,8 @@
+﻿import "./MapData/Data.bond"
+
+namespace Schemas
+
+struct ForgeMap
+{
+    1: Schemas.MapData.Container main;
+}
