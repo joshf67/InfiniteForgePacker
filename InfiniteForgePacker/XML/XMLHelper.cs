@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Xml;
 using System.Xml.Linq;
+using InfiniteForgeConstants.ObjectSettings;
 using InfiniteForgePacker.XML.Object;
 
 namespace InfiniteForgePacker.XML;
@@ -18,21 +19,15 @@ public static class XMLHelper
             from child in document.Nodes()
             where child.NodeType != XmlNodeType.Element
             select child,
-            SortByID(document.Root));
+            SortById(document.Root));
     }
 
-    private static XElement SortByID(XElement element)
+    private static XElement SortById(XElement element)
     {
-
         if (!element.HasElements) return element;
         
-        List<XElement> children = new List<XElement>();
+        var children = element.Elements().Select(SortById).ToList();
 
-        foreach (var child in element.Elements())
-        {
-            children.Add(SortByID(child));
-        }
-        
         children.Sort((a, b) =>
         {
             var aId = a.Attribute("id");
@@ -80,13 +75,10 @@ public static class XMLHelper
         return folderStruct;
     }
     
-    public static void AddObject(XDocument document, XMLObject obj)
+    public static void AddObject(XDocument document, GameObject obj)
     {
-        XElement xmlObject = XMLWriter.WriteStructToContainer(GetObjectList(document));
-        
-        obj.WriteObjectId(xmlObject);
-        obj.WriteObjectPosition(xmlObject);
-        obj.WriteObjectScale(xmlObject);
-        obj.WriteObjectSpecifics(document, xmlObject);
+        XElement objectContainer = XMLWriter.WriteStructToContainer(GetObjectList(document));
+        XMLObject xmlObject = new XMLObject(obj);
+        xmlObject.WriteObject(objectContainer, document);
     }
 }

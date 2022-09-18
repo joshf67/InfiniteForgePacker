@@ -30,13 +30,11 @@ public static class BlenderGeometry
             float posZ = float.Parse(pos[2]) * (metric ? 1 : TransformOffset);
     
             XMLHelper.AddObject(document, 
-                new XMLObject(
-                    new GameObject("Vertex " + i, 
-                        ObjectId.FORERUNNER_CONE,
-                        new Transform(new Vector3(posX, posY, posZ))
-                        )
-                    )
-                );
+                new GameObject("Vertex " + i, 
+                    ObjectId.FORERUNNER_CONE,
+                    new Transform(new Vector3(posX, posY, posZ))
+                )
+            );
             i++;
         }
 
