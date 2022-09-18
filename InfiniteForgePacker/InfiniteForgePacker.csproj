@@ -10,6 +10,7 @@
       <PackageReference Include="Bond.Core.CSharp" Version="10.0.0" />
       <PackageReference Include="Bond.CSharp" Version="10.0.0" />
       <PackageReference Include="Bond.Runtime.CSharp" Version="10.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
     </ItemGroup>
 
     <ItemGroup>
