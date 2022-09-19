@@ -44,16 +44,14 @@ public class XMLObject
         if (objectContainer is null)
             throw new Exception("Invalid object container when trying to read object position");
         
-        var position = XMLReader.GetXContainer(objectContainer, "struct", 3);
+        var position = XMLReader.GetVector3(objectContainer, 3);
+
         if (position is null)
             return Vector3.Zero;
-
-        var x = XMLReader.GetXElement(position, 0);
-        var y = XMLReader.GetXElement(position, 1);
-        var z = XMLReader.GetXElement(position, 2);
-
-        return new Vector3(x == null ? 0 : float.Parse(x.Value), y == null ? 0 : float.Parse(y.Value),
-            z == null ? 0 : float.Parse(z.Value));
+        
+        return new Vector3(position.Value.x == null ? 0 : float.Parse(position.Value.x.Value),
+            position.Value.y == null ? 0 : float.Parse(position.Value.y.Value),
+            position.Value.z == null ? 0 : float.Parse(position.Value.z.Value));
     }
 
     public static (Vector3 Forward, Vector3 Up, Vector3 Degrees) ReadObjectRotation(XContainer objectContainer)
@@ -61,30 +59,22 @@ public class XMLObject
         if (objectContainer is null)
             throw new Exception("Invalid object container when trying to read object rotation");
         
-        var objectUpRotationContainer = XMLReader.GetXContainer(objectContainer, "struct", 4);
-        var objectForwardRotationContainer = XMLReader.GetXContainer(objectContainer, "struct", 5);
+        
+        var upRotation = XMLReader.GetVector3(objectContainer, 4);
 
         var upVec = Vector3.Zero;
-        if (objectUpRotationContainer is not null)
-        {
-            var x = XMLReader.GetXElement(objectUpRotationContainer, 0);
-            var y = XMLReader.GetXElement(objectUpRotationContainer, 1);
-            var z = XMLReader.GetXElement(objectUpRotationContainer, 2);
-
-            upVec = new Vector3(x == null ? 0 : float.Parse(x.Value), y == null ? 0 : float.Parse(y.Value),
-                z == null ? 0 : float.Parse(z.Value));
-        }
+        if (upRotation is not null)
+            upVec = new Vector3(upRotation.Value.x == null ? 0 : float.Parse(upRotation.Value.x.Value),
+                upRotation.Value.y == null ? 0 : float.Parse(upRotation.Value.y.Value),
+                upRotation.Value.z == null ? 0 : float.Parse(upRotation.Value.z.Value));
         
-        var forwardVec = Vector3.Zero;
-        if (objectForwardRotationContainer is not null)
-        {
-            var x = XMLReader.GetXElement(objectForwardRotationContainer, 0);
-            var y = XMLReader.GetXElement(objectForwardRotationContainer, 1);
-            var z = XMLReader.GetXElement(objectForwardRotationContainer, 2);
+        var forwardRotation = XMLReader.GetVector3(objectContainer, 5);
 
-            forwardVec = new Vector3(x == null ? 0 : float.Parse(x.Value), y == null ? 0 : float.Parse(y.Value),
-                z == null ? 0 : float.Parse(z.Value));
-        }
+        var forwardVec = Vector3.Zero;
+        if (forwardRotation is not null)
+            upVec = new Vector3(forwardRotation.Value.x == null ? 0 : float.Parse(forwardRotation.Value.x.Value),
+                forwardRotation.Value.y == null ? 0 : float.Parse(forwardRotation.Value.y.Value),
+                forwardRotation.Value.z == null ? 0 : float.Parse(forwardRotation.Value.z.Value));
 
         return (forwardVec, upVec, Transform.DirectionToEuler(forwardVec, upVec).Degrees);
     }
@@ -97,21 +87,29 @@ public class XMLObject
         return XMLReader.GetXContainer(objectContainer, "struct", 8, createIfNull: createIfNull, clearOnFind: clearOnFind);
     }
     
-    public static Vector3 ReadObjectScale(XContainer objectContainer)
+    public static Vector3? ReadObjectScale(XContainer objectContainer)
     {
         if (objectContainer is null)
             throw new Exception("Invalid object container when trying to read object scale");
+
+        var additionalDataStruct = ReadObjectAdditionalData(objectContainer);
+
+        if (additionalDataStruct is null)
+            return null;
         
-        var position = XMLReader.GetXContainer(objectContainer, "struct", 3);
-        if (position is null)
-            return Vector3.One;
+        var scaleList = XMLReader.GetXContainer(additionalDataStruct, "list", 23);
+        
+        if (scaleList is null)
+            return null;
+        
+        var scale = XMLReader.GetVector3(scaleList);
 
-        var x = XMLReader.GetXElement(position, 0);
-        var y = XMLReader.GetXElement(position, 1);
-        var z = XMLReader.GetXElement(position, 2);
-
-        return new Vector3(x == null ? 0 : float.Parse(x.Value), y == null ? 0 : float.Parse(y.Value),
-            z == null ? 0 : float.Parse(z.Value));
+        if (scale is null)
+            return null;
+        
+        return new Vector3(scale.Value.x == null ? 0 : float.Parse(scale.Value.x.Value),
+            scale.Value.y == null ? 0 : float.Parse(scale.Value.y.Value),
+            scale.Value.z == null ? 0 : float.Parse(scale.Value.z.Value));
     }
 
     public static List<(XElement Element, int ObjectId)>? ReturnObjectsOfIds(XDocument document, int id = -1)
@@ -173,53 +171,30 @@ public class XMLObject
     {
         if (container is null)
             throw new Exception("Invalid object container when trying to write object rotation");
-        
-        var objectUpRotationContainer =
-            XMLReader.GetXContainer(container, "struct", 4, createIfNull: true, clearOnFind: true);
-        
-        var objectForwardRotationContainer =
-            XMLReader.GetXContainer(container, "struct", 5, createIfNull: true, clearOnFind: true);
 
         var rotationDirections = GameObject.Transform.DirectionVectors;
 
-        XMLWriter.WriteObjectToContainer(objectUpRotationContainer, rotationDirections.Up.X, 0);
-        XMLWriter.WriteObjectToContainer(objectUpRotationContainer, rotationDirections.Up.Y, 1);
-        XMLWriter.WriteObjectToContainer(objectUpRotationContainer, rotationDirections.Up.Z, 2);
-        
-        XMLWriter.WriteObjectToContainer(objectForwardRotationContainer, rotationDirections.Forward.X, 0);
-        XMLWriter.WriteObjectToContainer(objectForwardRotationContainer, rotationDirections.Forward.Y, 1);
-        XMLWriter.WriteObjectToContainer(objectForwardRotationContainer, rotationDirections.Forward.Z, 2);
+        XMLWriter.WriteVector3ToContainer(container, rotationDirections.Up, 4);
+        XMLWriter.WriteVector3ToContainer(container, rotationDirections.Forward, 5);
     }
     
     public void WriteObjectScale(XContainer container)
     {
         if (container is null)
             throw new Exception("Invalid object container when trying to write object scale");
-        
-        var objectDataScaleList =
-            XMLReader.GetXContainer(ReadObjectAdditionalData(container, true, true),
-                "list", 23, "struct", createIfNull: true, clearOnFind: true);
 
-        var objectScaleStruct = XMLReader.GetXContainer(objectDataScaleList, "struct", -1,
-            createIfNull: true, clearOnFind: true);
-        
-        var objectScaleFloatStruct = XMLReader.GetXContainer(objectScaleStruct, "struct", 0,
-            createIfNull: true, clearOnFind: true);
+        if (GameObject.Transform.IsStatic)
+        {
+            var objectDataScaleList =
+                XMLReader.GetXContainer(ReadObjectAdditionalData(container, true, true),
+                    "list", 23, "struct", createIfNull: true, clearOnFind: true);
 
-        XMLWriter.WriteObjectToContainer(objectScaleFloatStruct, GameObject.Transform.Scale.X, 0);
-        XMLWriter.WriteObjectToContainer(objectScaleFloatStruct, GameObject.Transform.Scale.Y, 1);
-        XMLWriter.WriteObjectToContainer(objectScaleFloatStruct, GameObject.Transform.Scale.Z, 2);
-        
-        // var randomContainer =
-        //     XMLReader.GetXContainer(objectScaleContainer, "list", 24, "struct", createIfNull: true, clearOnFind: true);
-        // var randomStruct = XMLWriter.WriteStructToContainer(randomContainer);
-        //
-        // XMLWriter.WriteObjectToContainer(randomStruct, 0, 2);
-        //
-        // var randomStructInside = XMLReader.GetXContainer(randomStruct, "struct", 1, createIfNull: true, clearOnFind: true);
-        // XMLWriter.WriteObjectToContainer(randomStructInside, 0, 0);
-        //
-        // XMLWriter.WriteObjectToContainer(randomStruct, 2, 1);
+            XMLWriter.WriteVector3ToContainer(objectDataScaleList, GameObject.Transform.Scale);
+        }
+        else
+        {
+            throw new NotImplementedException("Dyanmic objects are not supported yet");
+        }
     }
 
     public virtual void WriteObjectSpecifics(XDocument? document = null, XContainer? objectContainer = null)
