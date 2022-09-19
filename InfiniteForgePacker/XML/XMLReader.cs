@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8600
 
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace InfiniteForgePacker.XML;
@@ -73,5 +74,50 @@ public static class XMLReader
         } 
 
         return ret;
+    }
+    
+    public static (XElement? parent, XElement? x, XElement? y, XElement? z)? GetVector3(XContainer parent, int id = -1,
+        bool createIfNull = false)
+    {
+        if (parent is null)
+            throw new Exception("Cannot get vector3 when parent is null");
+        
+        XElement? vectorContainer = GetXContainer(parent, "struct", id);
+
+        if (vectorContainer is null)
+        {
+            if (createIfNull is false)
+                return null;
+
+            vectorContainer = XMLWriter.WriteVector3ToContainer(parent, Vector3.Zero);
+        }
+
+        XElement? x = GetXElement(vectorContainer, typeof(float), 0);
+        XElement? y = GetXElement(vectorContainer, typeof(float), 1);
+        XElement? z = GetXElement(vectorContainer, typeof(float), 2);
+        
+        return (vectorContainer, x, y, z);
+    }
+    
+    public static (XElement? parent, XElement? x, XElement? y)? GetVector2(XContainer parent, int id = -1,
+        bool createIfNull = false)
+    {
+        if (parent is null)
+            throw new Exception("Cannot get vector2 when parent is null");
+        
+        XElement? vectorContainer = GetXContainer(parent, "struct", id);
+
+        if (vectorContainer is null)
+        {
+            if (createIfNull is false)
+                return null;
+
+            vectorContainer = XMLWriter.WriteVector2ToContainer(parent, Vector2.Zero);
+        }
+
+        XElement? x = GetXElement(vectorContainer, typeof(float), 0);
+        XElement? y = GetXElement(vectorContainer, typeof(float), 1);
+        
+        return (vectorContainer, x, y);
     }
 }
