@@ -3,7 +3,6 @@
 using System.Numerics;
 using System.Xml.Linq;
 using InfiniteForgeConstants.ObjectSettings;
-using InfiniteForgePacker.XML.Object;
 
 namespace InfiniteForgePacker.XML.Application;
 

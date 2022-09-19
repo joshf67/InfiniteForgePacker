@@ -111,8 +111,20 @@ public static class XMLWriter
     //Creates an XElement of type struct, adds three float values, adds it as a child to container and returns it
     public static XElement WriteVector3ToContainer(XContainer container, Vector3 vector, int id = -1)
     {
-        XElement ret = WriteVector3(vector, id);
-        container.Add(ret);
+        XElement? ret = XMLReader.GetXContainer(container, "struct", id, clearOnFind: true);
+
+        //If container doesn't exist proceed as normal
+        if (ret is null)
+        {
+            ret = WriteVector3(vector, id);
+            container.Add(ret);
+            return ret;
+        }
+
+        //Otherwise setup all the valid values
+        WriteObjectToContainer(ret, vector.X, 0);
+        WriteObjectToContainer(ret, vector.Y, 1);
+        WriteObjectToContainer(ret, vector.Z, 2);
         return ret;
     }
 
@@ -129,8 +141,19 @@ public static class XMLWriter
     //Creates an XElement of type struct, adds two float values, adds it as a child to container and returns it
     public static XElement WriteVector2ToContainer(XContainer container, Vector2 vector, int id = -1)
     {
-        XElement ret = WriteVector2(vector, id);
-        container.Add(ret);
+        XElement? ret = XMLReader.GetXContainer(container, "struct", id, clearOnFind: true);
+        
+        //If container doesn't exist proceed as normal
+        if (ret is null)
+        {
+            ret = WriteVector2(vector, id);
+            container.Add(ret);
+            return ret;
+        }
+
+        //Otherwise setup all the valid values
+        WriteObjectToContainer(ret, vector.X, 0);
+        WriteObjectToContainer(ret, vector.Y, 1);
         return ret;
     }
     

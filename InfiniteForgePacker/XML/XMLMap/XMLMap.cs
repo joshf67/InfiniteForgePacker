@@ -2,7 +2,6 @@ using System.Xml.Linq;
 using InfiniteForgeConstants;
 using InfiniteForgeConstants.MapSettings;
 using InfiniteForgeConstants.MapSettings.AmbientSound;
-using InfiniteForgePacker.XML.Object;
 
 namespace InfiniteForgePacker.XML;
 

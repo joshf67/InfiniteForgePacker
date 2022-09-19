@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using InfiniteForgeConstants.ObjectSettings;
 
-namespace InfiniteForgePacker.XML.Object;
+namespace InfiniteForgePacker.XML;
 
 public class XMLObject
 {
@@ -138,7 +138,7 @@ public class XMLObject
         return ret;
     }
 
-    public void WriteObject(XContainer container, XDocument? document = null)
+    public void WriteObject( XContainer container, XDocument? document = null)
     {
         if (container is null)
             throw new Exception("Invalid object container when trying to write object");
@@ -165,13 +165,8 @@ public class XMLObject
     {
         if (container is null)
             throw new Exception("Invalid object container when trying to write object position");
-        
-        var objectPositionContainer =
-            XMLReader.GetXContainer(container, "struct", 3, createIfNull: true, clearOnFind: true);
 
-        XMLWriter.WriteObjectToContainer(objectPositionContainer, GameObject.Transform.Position.X, 0);
-        XMLWriter.WriteObjectToContainer(objectPositionContainer, GameObject.Transform.Position.Y, 1);
-        XMLWriter.WriteObjectToContainer(objectPositionContainer, GameObject.Transform.Position.Z, 2);
+        XMLWriter.WriteVector3ToContainer(container, GameObject.Transform.Position, 3);
     }
 
     public void WriteObjectRotation(XContainer container)
