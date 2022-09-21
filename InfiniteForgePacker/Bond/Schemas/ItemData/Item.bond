@@ -1,4 +1,10 @@
 namespace Schemas.ItemData;
+
+struct ItemIdContainer
+{
+    0: int32 itemId;
+}
 struct Container
 {
+    2: ItemIdContainer items;
 }
