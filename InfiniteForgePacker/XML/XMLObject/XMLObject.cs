@@ -156,7 +156,7 @@ public class XMLObject
             throw new Exception("Invalid object container when trying to write object id");
         
         var objectIdContainer = XMLReader.GetXContainer(container, "struct", 2, createIfNull: true, clearOnFind: true);
-        XMLWriter.WriteObjectToContainer(objectIdContainer, GameObject.ObjectId, 0);
+        XMLWriter.WriteObjectToContainer(objectIdContainer, (int)GameObject.ObjectId, 0);
     }
 
     public void WriteObjectPosition(XContainer container)
@@ -186,7 +186,7 @@ public class XMLObject
         if (GameObject.Transform.IsStatic)
         {
             var objectDataScaleList =
-                XMLReader.GetXContainer(ReadObjectAdditionalData(container, true, true),
+                XMLReader.GetXContainer(ReadObjectAdditionalData(container, true),
                     "list", 23, "struct", createIfNull: true, clearOnFind: true);
 
             XMLWriter.WriteVector3ToContainer(objectDataScaleList, GameObject.Transform.Scale);

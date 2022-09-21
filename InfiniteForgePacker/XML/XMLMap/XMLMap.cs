@@ -210,7 +210,7 @@ public class XMLMap
             return;
 
         var mapIdContainer = XMLReader.GetXContainer(mapContainer, "struct", 0, createIfNull: true, clearOnFind: true);
-        XMLWriter.WriteObjectToContainer(mapIdContainer, map.MapId, 0);
+        XMLWriter.WriteObjectToContainer(mapIdContainer, (int)map.MapId, 0);
     }
 
     public static void WriteDecorators(XContainer mapContainer, Map map)
