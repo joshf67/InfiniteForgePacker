@@ -1,0 +1,4 @@
+namespace Schemas.ItemData;
+struct Container
+{
+}
