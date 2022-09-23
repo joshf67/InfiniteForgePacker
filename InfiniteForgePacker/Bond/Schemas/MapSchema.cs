@@ -23,7 +23,7 @@ public class MapSchema
 [Bond.Schema]
 public class MapId
 {
-    [Id(0)] public Int32 Id { get; set; }
+    [Id(0)] public int Id { get; set; }
 }
 
 [Bond.Schema]
@@ -31,7 +31,7 @@ public class MapIdContainer
 {
     [Id(0)] public MapId MapId { get; set; }
 
-
+    /*
     [Id(1)] public UnknownRandomListContainer Type { get; set; }
     [Id(3)] public int id3Int { get; set; }
     [Id(4)] public int id4Int { get; set; }
@@ -41,15 +41,15 @@ public class MapIdContainer
 
     [Id(29)] public GenericIntStruct int29Int { get; set; }
 
-    [Id(30)] public DebugStruct id30Struct { get; set; } // this is a struct
-    [Id(31)] public DebugStruct id31Struct { get; set; }
-    [Id(32)] public DebugStruct id32Struct { get; set; }
-    [Id(33)] public DebugStruct id33Struct { get; set; }
-    [Id(34)] public DebugStruct id34Struct { get; set; }
+    //[Id(30)] public DebugStruct id30Struct { get; set; } // this is a struct
+    //[Id(31)] public DebugStruct id31Struct { get; set; }
+    //[Id(32)] public DebugStruct id32Struct { get; set; }
+    //[Id(33)] public DebugStruct id33Struct { get; set; }
+    //[Id(34)] public DebugStruct id34Struct { get; set; }
     [Id(39)] public MapLightingSettings LightSettings { get; set; }
     [Id(41)] public Id41StructContainer id41StructContainer { get; set; }
     [Id(47)] public LinkedList<int> id47List { get; set; }
-
+*/
     [Bond.Schema]
     public class Id41StructContainer
     {
@@ -203,7 +203,7 @@ public class UnknownRandomNumberList
 [Bond.Schema]
 public class Item
 {
-    [Id(2)] public int ItemId { get; set; } = default;
+    [Id(2)] public GenericIntStruct ItemId { get; set; } = default;
     [Id(3)] public Vector3 Position { get; set; } = new Vector3();
     [Id(4)] public Vector3 Up { get; set; } = new Vector3();
     [Id(5)] public Vector3 Forward { get; set; } = new Vector3();
@@ -214,7 +214,7 @@ public class Item
     [Id(7)]
     public uint Unknown1 { get; set; } = default;
 
-    [Id(8)] public ItemSettingsContainer SettingsContainer { get; set; }
+    [Id(8)] public ItemSettingsContainer SettingsContainer { get; set; } = new ItemSettingsContainer();
     [Id(9)] public Unknown_9 Unknown9 { get; set; } = new Unknown_9();
     [Id(10)] public Unknown_10 Unknown10 { get; set; } = new Unknown_10();
 
