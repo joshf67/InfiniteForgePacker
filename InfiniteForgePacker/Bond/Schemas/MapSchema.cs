@@ -207,6 +207,11 @@ public class Item
     [Id(3)] public Vector3 Position { get; set; } = new Vector3();
     [Id(4)] public Vector3 Up { get; set; } = new Vector3();
     [Id(5)] public Vector3 Forward { get; set; } = new Vector3();
+    [Id(7)] public uint StaticDynamicFlagUnknown { get; set; }
+
+    [Id(24)]
+    public LinkedList<UnknownVariantSettings> VariantSettingsList { get; set; } =
+        new LinkedList<UnknownVariantSettings>();
 
     /// <summary>
     /// Unknown (changes from 21 when static to 1 when dynamic)
@@ -217,6 +222,14 @@ public class Item
     [Id(8)] public ItemSettingsContainer SettingsContainer { get; set; } = new ItemSettingsContainer();
     [Id(9)] public Unknown_9 Unknown9 { get; set; } = new Unknown_9();
     [Id(10)] public Unknown_10 Unknown10 { get; set; } = new Unknown_10();
+
+
+    [Bond.Schema]
+    public class UnknownVariantSettings
+    {
+        [Id(0)] public int StaticDynamicFlag { get; set; }
+        [Id(2)] public int ScriptBrainFlag { get; set; }
+    }
 
     [Bond.Schema]
     public class Unknown_9
@@ -237,7 +250,7 @@ public class ItemSettingsContainer
     [Id(22)]
     public LinkedList<ScriptIndexSettings22> ScriptIndex22 { get; set; } = new LinkedList<ScriptIndexSettings22>();
 
-    [Id(23)] public LinkedList<ScaleList> Type { get; set; } = new LinkedList<ScaleList>();
+    [Id(23)] public LinkedList<ScaleList> Scalelist { get; set; } = new LinkedList<ScaleList>();
 
     [Id(24)] public LinkedList<VariantOptions> VariantSettings { get; set; }
 
