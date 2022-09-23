@@ -13,14 +13,6 @@ public static class XMLWriter
         return ret;
     }
     
-    //Creates an XElement using WriteObject(string type) and adds it as a child to container, returns the new XElement
-    public static XElement WriteObjectToContainer(XContainer container, string type, int id = -1)
-    {
-        XElement ret = WriteObject(type, id);
-        container.Add(ret);
-        return ret;
-    }
-    
     //Creates an XElement using WriteObject(value) and adds it as a child to container, returns the new XElement
     public static XElement WriteObjectToContainer(XContainer container, object value, int id = -1)
     {
@@ -60,26 +52,6 @@ public static class XMLWriter
         else
             throw new NotImplementedException();
 
-        if (id is not -1)
-            ret.SetAttributeValue("id", id.ToString());
-        
-        return ret;
-    }
-
-    //Creates an XElement using string type, applies Id if given and returns it
-    public static XElement WriteObject(string type, int id = -1)
-    {
-        XElement ret = type switch
-        {
-            "bool" => new XElement("bool"),
-            "ushort" => new XElement("uint16"),
-            "uint" => new XElement("uint32"),
-            "int" => new XElement("int32"),
-            "string" => new XElement("wstring"),
-            "float" => new XElement("float"),
-            _ => throw new NotImplementedException()
-        };
-        
         if (id is not -1)
             ret.SetAttributeValue("id", id.ToString());
         
