@@ -1,7 +1,9 @@
 using Bond;
-using Bond.IO.Safe;
+using Bond.IO.Unsafe;
 using Bond.Protocols;
 using BondReader.Schemas;
+using InputBuffer = Bond.IO.Safe.InputBuffer;
+using OutputBuffer = Bond.IO.Safe.OutputBuffer;
 
 namespace BondReader;
 
@@ -16,18 +18,23 @@ public class BondHelper
         return Deserialize<T>.From(reader);
     }
 
-    public static ArraySegment<byte> WriteBond<T>(T src)
+    public static void WriteBond<T>(T src, string filePath)
     {
-        var output = new OutputBuffer();
-        var writer = new CompactBinaryWriter<OutputBuffer>(output);
+        //var output = new OutputBuffer();
+        ;
 
-        // The first calls to Serialize.To and Deserialize<T>.From can take
-        // a relatively long time because they generate the de/serializer
-        // for a given type and protocol.
-        Serialize.To(writer, src);
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            var output = new OutputStream(stream);
+            var writer = new CompactBinaryWriter<OutputStream>(output, 2);
 
-
-        return output.Data;
+            // The first calls to Serialize.To and Deserialize<T>.From can take
+            // a relatively long time because they generate the de/serializer
+            // for a given type and protocol.
+            Serialize.To(writer, src);
+            output.Flush();
+            stream.Flush();
+        }
     }
 
     public static T ReadBond<T>(ArraySegment<byte> obj)
