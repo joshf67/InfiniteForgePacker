@@ -3,33 +3,24 @@ using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using Bond;
-using Schemas;
+using BondReader.Schemas.Generic;
+using BondReader.Schemas.Items;
+using InfiniteForgeConstants;
+using Vector2 = BondReader.Schemas.Generic.Vector2;
+using Vector3 = BondReader.Schemas.Generic.Vector3;
 
 namespace BondReader.Schemas;
 
 [Bond.Schema]
 public class MapSchema
 {
-    [Id(1)] public MapIdContainer MapIdContainer { get; set; }
-
-
-    [Id(3)] public LinkedList<Item> Items { get; set; }
-    [Id(6)] public MapIdContainer.DebugStruct FolderContainer { get; set; }
-    [Id(7)] public MapIdContainer.DebugStruct id7Struct { get; set; }
-
-    [Id(10)] public MapIdContainer.DebugStruct id10Struct { get; set; }
-}
-
-[Bond.Schema]
-public class MapId
-{
-    [Id(0)] public int Id { get; set; }
-}
-
-[Bond.Schema]
-public class MapIdContainer
-{
-    [Id(0)] public MapId MapId { get; set; }
+    public MapSchema(Map map)
+    {
+        MapId = new GenericIntStruct((int)map.MapId);
+        //LightSettings = new MapLightingSettings(map);
+    }
+    
+    [Id(0)] public GenericIntStruct MapId { get; set; }
 
     /*
     [Id(1)] public UnknownRandomListContainer Type { get; set; }
@@ -61,15 +52,52 @@ public class MapIdContainer
     }
 
     [Bond.Schema]
-    public class DebugStruct
-    {
-    }
-
-    [Bond.Schema]
     public class MapLightingSettings
     {
+        public MapLightingSettings(Map map)
+        {
+            if (map.Options?.Sunlight?.Intensity != null) SunLightIntensity = (float)map.Options.Sunlight.Intensity;
+            if (map.Options?.Sunlight?.ColorOverride != null) SunLightColor = (int)map.Options.Sunlight.ColorOverride;
+            if (map.Options?.Sunlight?.Direction != null) SunDirection = new Vector2(map.Options.Sunlight.Direction.Value);
+            
+            if (map.Options?.LightBounce?.Intensity != null) BounceIntensity = (float)map.Options.LightBounce.Intensity;
+            if (map.Options?.LightBounce?.TintOverride != null) BounceTint = (int)map.Options.LightBounce.TintOverride;
+            
+            if (map.Options?.SkyLight?.Intensity != null) SkyLightIntensity = (float)map.Options.SkyLight.Intensity;
+            if (map.Options?.SkyLight?.TintOverride != null) SkyLightTint = (int)map.Options.SkyLight.TintOverride;
+            
+            //Still unknown how to do DirectionalSkyLight
+
+            if (map.Options?.WindDirection?.Direction != null) WindDirection = new Vector3(map.Options.WindDirection.Direction.Value);
+            if (map.Options?.WindDirection?.Speed != null) WindSpeed = map.Options.WindDirection.Speed.Value;
+            
+            if (map.Options?.VolumetricFog?.Enabled != null) EnableFog = (bool)map.Options.VolumetricFog.Enabled;
+            if (map.Options?.VolumetricFog?.Density != null) FogDensity = (float)map.Options.VolumetricFog.Density;
+            if (map.Options?.VolumetricFog?.Color != null) FogColor = (int)map.Options.VolumetricFog.Color;
+            if (map.Options?.VolumetricFog?.NearRange != null) NearRange = (float)map.Options.VolumetricFog.NearRange;
+            if (map.Options?.VolumetricFog?.FarRange != null) FarRange = (float)map.Options.VolumetricFog.FarRange;
+            
+            if (map.Options?.SkyRendering?.SkyIntensity != null) SkyIntensity = (float)map.Options.SkyRendering.SkyIntensity;
+            if (map.Options?.SkyRendering?.SunIntensity != null) SkySunIntensity = (float)map.Options.SkyRendering.SunIntensity;
+            if (map.Options?.SkyRendering?.SkyTint != null) SkyTint = (int)map.Options.SkyRendering.SkyTint;
+            if (map.Options?.SkyRendering?.SkyTintIntensity != null) SkyTintIntensity = (float)map.Options.SkyRendering.SkyTintIntensity;
+            if (map.Options?.SkyRendering?.SunTint != null) SkySunTint = (int)map.Options.SkyRendering.SunTint;
+            if (map.Options?.SkyRendering?.SunTintIntensity != null) SkySunTintIntensity = (float)map.Options.SkyRendering.SunTintIntensity;
+            
+            if (map.Options?.AtmosphericFog?.FogOffset != null) FogOffset = (float)map.Options.AtmosphericFog.FogOffset;
+            if (map.Options?.AtmosphericFog?.FogNearFallof != null) FogNearFalloff = (float)map.Options.AtmosphericFog.FogNearFallof;
+            if (map.Options?.AtmosphericFog?.FogIntensity != null) FogIntensity = (float)map.Options.AtmosphericFog.FogIntensity;
+            if (map.Options?.AtmosphericFog?.FogDepthScale != null) FogDepthScale = (float)map.Options.AtmosphericFog.FogDepthScale;
+            if (map.Options?.AtmosphericFog?.FogFallofUp != null) FogFalloffUp = (float)map.Options.AtmosphericFog.FogFallofUp;
+            if (map.Options?.AtmosphericFog?.FogFallofDown != null) FogFalloffDown = (float)map.Options.AtmosphericFog.FogFallofDown;
+            if (map.Options?.AtmosphericFog?.SkyFogIntensity != null) SkyFogIntensity = (float)map.Options.AtmosphericFog.SkyFogIntensity;
+            if (map.Options?.AtmosphericFog?.Inscattering != null) Inscattering = (float)map.Options.AtmosphericFog.Inscattering;
+            if (map.Options?.AtmosphericFog?.FakeInscatteringTint != null) InscatteringTint = (int)map.Options.AtmosphericFog.FakeInscatteringTint;
+        }
+        
         //Sunlight
         [Id(0)] public float SunLightIntensity { get; set; }
+        [Id(1)] public int SunLightColor { get; set; }
         [Id(2)] public Vector2 SunDirection { get; set; }
         [Id(3)] public float BounceIntensity { get; set; }
         [Id(4)] public int BounceTint { get; set; }
@@ -156,22 +184,6 @@ public class MapIdContainer
         [Id(40)]
         public int id40Int { get; set; }
     }
-
-    [Bond.Schema]
-    public class Id24ListStruct
-    {
-    }
-
-    [Bond.Schema]
-    public class Id21Struct
-    {
-    }
-}
-
-[Bond.Schema]
-public class GenericIntStruct
-{
-    [Id(0)] public int Int { get; set; }
 }
 
 [Bond.Schema]
@@ -200,116 +212,5 @@ public class UnknownRandomNumberList
     [Id(0)] public LinkedList<byte> Numbers { get; set; }
 }
 
-[Bond.Schema]
-public class Item
-{
-    [Id(2)] public GenericIntStruct ItemId { get; set; } = default;
-    [Id(3)] public Vector3 Position { get; set; } = new Vector3();
-    [Id(4)] public Vector3 Up { get; set; } = new Vector3();
-    [Id(5)] public Vector3 Forward { get; set; } = new Vector3();
-
-    /// <summary>
-    /// Unknown (changes from 21 when static to 1 when dynamic)
-    [Id(7)]
-    public byte StaticDynamicFlagUnknown { get; set; } = default;
-
-    [Id(24)]
-    public LinkedList<UnknownVariantSettings> VariantSettingsList { get; set; } =
-        new LinkedList<UnknownVariantSettings>();
-
-    /// <summary>
-    /// Unknown (changes from 21 when static to 1 when dynamic)
-    /// </summary>
-
-    [Id(8)]
-    public ItemSettingsContainer SettingsContainer { get; set; } = new ItemSettingsContainer();
-
-    [Id(9)] public Unknown_9 Unknown9 { get; set; } = new Unknown_9();
-    [Id(10)] public Unknown_10 Unknown10 { get; set; } = new Unknown_10();
 
 
-    [Bond.Schema]
-    public class UnknownVariantSettings
-    {
-        /// <summary>
-        /// 2 when static 1 when dynamic 
-        /// </summary>
-        [Id(0)]
-        public int StaticDynamicFlag { get; set; }
-
-        [Id(2)] public int ScriptBrainFlag { get; set; }
-    }
-
-    [Bond.Schema]
-    public class Unknown_9
-    {
-    }
-
-    [Bond.Schema]
-    public class Unknown_10
-    {
-    }
-}
-
-[Bond.Schema]
-public class ItemSettingsContainer
-{
-    [Id(0)] public LinkedList<ItemSettings0> ItemSettings { get; set; } = new LinkedList<ItemSettings0>();
-
-    [Id(22)]
-    public LinkedList<ScriptIndexSettings22> ScriptIndex22 { get; set; } = new LinkedList<ScriptIndexSettings22>();
-
-    [Id(23)] public LinkedList<ScaleList> Scalelist { get; set; } = new LinkedList<ScaleList>();
-
-    [Id(24)] public LinkedList<VariantOptions> VariantSettings { get; set; }
-
-
-    [Bond.Schema]
-    public class VariantOptions
-    {
-    }
-
-    [Bond.Schema]
-    public class ScaleList
-    {
-        [Id(0)] public Vector3 ScaleContainer { get; set; }
-    }
-
-    [Bond.Schema]
-    public class ScriptIndexSettings22
-    {
-        /// <summary>
-        /// The index of what scripts are attached to this (possibly only on brains)
-        /// </summary>
-        [Id(0)]
-        public uint AttachedScriptIndex { get; set; } = default;
-    }
-
-    [Bond.Schema]
-    public class ItemSettings0
-    {
-        /// <summary>
-        /// Unknown but its seems to be related to dynamic / static items
-        /// 2 = static 1 = dynamic
-        /// </summary>
-        [Id(1)]
-        public int UnknownStaticDynamicFlag { get; set; } = default;
-
-        [Id(10)] public ushort UnknownuUnSignedshort { get; set; } = default;
-    }
-}
-
-[Bond.Schema]
-public class Vector3
-{
-    [Id(0)] public float X { get; set; } = default;
-    [Id(1)] public float Y { get; set; } = default;
-    [Id(2)] public float Z { get; set; } = default;
-}
-
-[Bond.Schema]
-public class Vector2
-{
-    [Id(0)] public float X { get; set; } = default;
-    [Id(1)] public float Y { get; set; } = default;
-}
