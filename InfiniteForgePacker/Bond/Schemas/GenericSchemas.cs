@@ -9,7 +9,11 @@ public class GenericIntStruct
     {
         Int = value;
     }
-    
+
+    public GenericIntStruct()
+    {
+    }
+
     [Id(0)] public int Int { get; set; }
 }
 
@@ -22,14 +26,19 @@ public class Vector3
         Y = y;
         Z = z;
     }
-    
+
+    public Vector3()
+    {
+        
+    }
+
     public Vector3(System.Numerics.Vector3 vector3)
     {
         X = vector3.X;
         Y = vector3.Y;
         Z = vector3.Z;
     }
-    
+
     [Id(0)] public float X { get; set; } = default;
     [Id(1)] public float Y { get; set; } = default;
     [Id(2)] public float Z { get; set; } = default;
@@ -43,13 +52,13 @@ public class Vector2
         X = x;
         Y = y;
     }
-    
+
     public Vector2(System.Numerics.Vector2 vector2)
     {
         X = vector2.X;
         Y = vector2.Y;
     }
-    
+
     [Id(0)] public float X { get; set; } = default;
     [Id(1)] public float Y { get; set; } = default;
 }
@@ -57,11 +66,17 @@ public class Vector2
 [Bond.Schema]
 public class DebugStruct
 {
-
+    public DebugStruct()
+    {
+        
+    }
 }
 
 [Bond.Schema]
 public class UnknownStruct
 {
-
+    public UnknownStruct()
+    {
+        
+    }
 }

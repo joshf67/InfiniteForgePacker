@@ -6,6 +6,7 @@ using Bond;
 using BondReader.Schemas.Generic;
 using BondReader.Schemas.Items;
 using InfiniteForgeConstants;
+using InfiniteForgeConstants.MapSettings;
 using Vector2 = BondReader.Schemas.Generic.Vector2;
 using Vector3 = BondReader.Schemas.Generic.Vector3;
 
@@ -16,10 +17,20 @@ public class MapSchema
 {
     public MapSchema(Map map)
     {
-        MapId = new GenericIntStruct((int)map.MapId);
+        //  MapId = new GenericIntStruct((int)map.MapId);
         //LightSettings = new MapLightingSettings(map);
     }
-    
+
+    public MapSchema(MapId mapId)
+    {
+        this.MapId = new GenericIntStruct();
+        this.MapId.Int = (int)mapId;
+    }
+
+    public MapSchema()
+    {
+    }
+
     [Id(0)] public GenericIntStruct MapId { get; set; }
 
     /*
@@ -58,43 +69,57 @@ public class MapSchema
         {
             if (map.Options?.Sunlight?.Intensity != null) SunLightIntensity = (float)map.Options.Sunlight.Intensity;
             if (map.Options?.Sunlight?.ColorOverride != null) SunLightColor = (int)map.Options.Sunlight.ColorOverride;
-            if (map.Options?.Sunlight?.Direction != null) SunDirection = new Vector2(map.Options.Sunlight.Direction.Value);
-            
+            if (map.Options?.Sunlight?.Direction != null)
+                SunDirection = new Vector2(map.Options.Sunlight.Direction.Value);
+
             if (map.Options?.LightBounce?.Intensity != null) BounceIntensity = (float)map.Options.LightBounce.Intensity;
             if (map.Options?.LightBounce?.TintOverride != null) BounceTint = (int)map.Options.LightBounce.TintOverride;
-            
+
             if (map.Options?.SkyLight?.Intensity != null) SkyLightIntensity = (float)map.Options.SkyLight.Intensity;
             if (map.Options?.SkyLight?.TintOverride != null) SkyLightTint = (int)map.Options.SkyLight.TintOverride;
-            
+
             //Still unknown how to do DirectionalSkyLight
 
-            if (map.Options?.WindDirection?.Direction != null) WindDirection = new Vector3(map.Options.WindDirection.Direction.Value);
+            if (map.Options?.WindDirection?.Direction != null)
+                WindDirection = new Vector3(map.Options.WindDirection.Direction.Value);
             if (map.Options?.WindDirection?.Speed != null) WindSpeed = map.Options.WindDirection.Speed.Value;
-            
+
             if (map.Options?.VolumetricFog?.Enabled != null) EnableFog = (bool)map.Options.VolumetricFog.Enabled;
             if (map.Options?.VolumetricFog?.Density != null) FogDensity = (float)map.Options.VolumetricFog.Density;
             if (map.Options?.VolumetricFog?.Color != null) FogColor = (int)map.Options.VolumetricFog.Color;
             if (map.Options?.VolumetricFog?.NearRange != null) NearRange = (float)map.Options.VolumetricFog.NearRange;
             if (map.Options?.VolumetricFog?.FarRange != null) FarRange = (float)map.Options.VolumetricFog.FarRange;
-            
-            if (map.Options?.SkyRendering?.SkyIntensity != null) SkyIntensity = (float)map.Options.SkyRendering.SkyIntensity;
-            if (map.Options?.SkyRendering?.SunIntensity != null) SkySunIntensity = (float)map.Options.SkyRendering.SunIntensity;
+
+            if (map.Options?.SkyRendering?.SkyIntensity != null)
+                SkyIntensity = (float)map.Options.SkyRendering.SkyIntensity;
+            if (map.Options?.SkyRendering?.SunIntensity != null)
+                SkySunIntensity = (float)map.Options.SkyRendering.SunIntensity;
             if (map.Options?.SkyRendering?.SkyTint != null) SkyTint = (int)map.Options.SkyRendering.SkyTint;
-            if (map.Options?.SkyRendering?.SkyTintIntensity != null) SkyTintIntensity = (float)map.Options.SkyRendering.SkyTintIntensity;
+            if (map.Options?.SkyRendering?.SkyTintIntensity != null)
+                SkyTintIntensity = (float)map.Options.SkyRendering.SkyTintIntensity;
             if (map.Options?.SkyRendering?.SunTint != null) SkySunTint = (int)map.Options.SkyRendering.SunTint;
-            if (map.Options?.SkyRendering?.SunTintIntensity != null) SkySunTintIntensity = (float)map.Options.SkyRendering.SunTintIntensity;
-            
+            if (map.Options?.SkyRendering?.SunTintIntensity != null)
+                SkySunTintIntensity = (float)map.Options.SkyRendering.SunTintIntensity;
+
             if (map.Options?.AtmosphericFog?.FogOffset != null) FogOffset = (float)map.Options.AtmosphericFog.FogOffset;
-            if (map.Options?.AtmosphericFog?.FogNearFallof != null) FogNearFalloff = (float)map.Options.AtmosphericFog.FogNearFallof;
-            if (map.Options?.AtmosphericFog?.FogIntensity != null) FogIntensity = (float)map.Options.AtmosphericFog.FogIntensity;
-            if (map.Options?.AtmosphericFog?.FogDepthScale != null) FogDepthScale = (float)map.Options.AtmosphericFog.FogDepthScale;
-            if (map.Options?.AtmosphericFog?.FogFallofUp != null) FogFalloffUp = (float)map.Options.AtmosphericFog.FogFallofUp;
-            if (map.Options?.AtmosphericFog?.FogFallofDown != null) FogFalloffDown = (float)map.Options.AtmosphericFog.FogFallofDown;
-            if (map.Options?.AtmosphericFog?.SkyFogIntensity != null) SkyFogIntensity = (float)map.Options.AtmosphericFog.SkyFogIntensity;
-            if (map.Options?.AtmosphericFog?.Inscattering != null) Inscattering = (float)map.Options.AtmosphericFog.Inscattering;
-            if (map.Options?.AtmosphericFog?.FakeInscatteringTint != null) InscatteringTint = (int)map.Options.AtmosphericFog.FakeInscatteringTint;
+            if (map.Options?.AtmosphericFog?.FogNearFallof != null)
+                FogNearFalloff = (float)map.Options.AtmosphericFog.FogNearFallof;
+            if (map.Options?.AtmosphericFog?.FogIntensity != null)
+                FogIntensity = (float)map.Options.AtmosphericFog.FogIntensity;
+            if (map.Options?.AtmosphericFog?.FogDepthScale != null)
+                FogDepthScale = (float)map.Options.AtmosphericFog.FogDepthScale;
+            if (map.Options?.AtmosphericFog?.FogFallofUp != null)
+                FogFalloffUp = (float)map.Options.AtmosphericFog.FogFallofUp;
+            if (map.Options?.AtmosphericFog?.FogFallofDown != null)
+                FogFalloffDown = (float)map.Options.AtmosphericFog.FogFallofDown;
+            if (map.Options?.AtmosphericFog?.SkyFogIntensity != null)
+                SkyFogIntensity = (float)map.Options.AtmosphericFog.SkyFogIntensity;
+            if (map.Options?.AtmosphericFog?.Inscattering != null)
+                Inscattering = (float)map.Options.AtmosphericFog.Inscattering;
+            if (map.Options?.AtmosphericFog?.FakeInscatteringTint != null)
+                InscatteringTint = (int)map.Options.AtmosphericFog.FakeInscatteringTint;
         }
-        
+
         //Sunlight
         [Id(0)] public float SunLightIntensity { get; set; }
         [Id(1)] public int SunLightColor { get; set; }
@@ -211,6 +236,3 @@ public class UnknownRandomNumberList
 {
     [Id(0)] public LinkedList<byte> Numbers { get; set; }
 }
-
-
-
