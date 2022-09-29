@@ -31,7 +31,7 @@ public class MapSchema
     {
     }
 
-    [Id(0)] public GenericIntStruct MapId { get; set; }
+    [Id(0)] public GenericIntStruct MapId { get; set; } = new GenericIntStruct();
 
     /*
     [Id(1)] public UnknownRandomListContainer Type { get; set; }
