@@ -10,7 +10,7 @@ namespace BondReader.Schemas;
 [Bond.Schema]
 public class BondSchema
 {
-    public BondSchema(Map map)
+    public BondSchema(Map map , bool useMetric = false)
     {
         MapIdContainer = new MapSchema(map);
 
@@ -18,7 +18,7 @@ public class BondSchema
 
         foreach (var gameObject in map.GameObjects)
         {
-            Items.AddFirst(new ItemSchema(gameObject));
+            Items.AddFirst(new ItemSchema(gameObject, useMetric));
         }
     }
 

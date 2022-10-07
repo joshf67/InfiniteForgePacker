@@ -7,10 +7,10 @@ namespace BondReader.Schemas.Items;
 [Bond.Schema]
 public class ItemSchema
 {
-    public ItemSchema(GameObject gameObject)
+    public ItemSchema(GameObject gameObject , bool useMetric = false)
     {
         ItemId = new GenericIntStruct((int)gameObject.ObjectId);
-        Position = new Vector3(gameObject.Transform.Position);
+        Position = useMetric ? new Vector3(gameObject.Transform.MetricPosition) : new Vector3(gameObject.Transform.Position);
         Up = new Vector3(gameObject.Transform.DirectionVectors.Up);
         Forward = new Vector3(gameObject.Transform.DirectionVectors.Forward);
         StaticDynamicFlagUnknown = (byte)(gameObject.Transform.IsStatic ? 21 : 1);
@@ -118,7 +118,7 @@ public class ItemSettingsContainer
     public ItemSettingsContainer(GameObject gameObject)
     {
         ItemSettings.AddFirst(new ItemSettings0ObjectPhysics
-            (gameObject.Transform.PhysicsMode, default));
+            (gameObject.Transform.PhysicsType, default));
         Scale.AddFirst(new ScaleList(gameObject));
         VariantSettings.AddFirst(new ItemSchema.VariantSettings(gameObject.Transform.IsStatic ? 2 : 1
             , gameObject.ObjectSettings.VariantId, gameObject.Transform.IsStatic ? 1 : 2));
@@ -132,6 +132,8 @@ public class ItemSettingsContainer
     public LinkedList<UnnamedDynamicObjectDataContainer> DynamicObjectDataContainer { get; set; }
         = new LinkedList<UnnamedDynamicObjectDataContainer>();
 
+    //public LinkedList<GenericFactory> ItemLables { get; set; } = new LinkedList<ItemLable>();
+
     [Id(22)]
     public LinkedList<ScriptIndexSettings22> ScriptIndex22 { get; set; }
         = new LinkedList<ScriptIndexSettings22>();
@@ -143,6 +145,7 @@ public class ItemSettingsContainer
     [Id(24)]
     public LinkedList<ItemSchema.VariantSettings> VariantSettings { get; set; } =
         new LinkedList<ItemSchema.VariantSettings>();
+
 
     [Bond.Schema]
     public class UnnamedDynamicObjectDataContainer
@@ -224,9 +227,9 @@ public class ItemSettingsContainer
     [Bond.Schema]
     public class ItemSettings0ObjectPhysics
     {
-        public ItemSettings0ObjectPhysics(PhysicsMode physicsMode, ushort unknown)
+        public ItemSettings0ObjectPhysics(PhysicsType physicsType, ushort unknown)
         {
-            ObjectPhysicsMode = (int)physicsMode;
+            ObjectPhysicsMode = (int)physicsType;
             UnknownuUnSignedshort = unknown;
         }
 
