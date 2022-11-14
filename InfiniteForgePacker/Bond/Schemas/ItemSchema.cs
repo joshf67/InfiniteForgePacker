@@ -118,7 +118,7 @@ public class ItemSettingsContainer
     public ItemSettingsContainer(GameObject gameObject)
     {
         ItemSettings.AddFirst(new ItemSettings0ObjectPhysics
-            (gameObject.Transform.PhysicsMode, default));
+            (gameObject.Transform.PhysicsType, default));
         Scale.AddFirst(new ScaleList(gameObject));
         VariantSettings.AddFirst(new ItemSchema.VariantSettings(gameObject.Transform.IsStatic ? 2 : 1
             , gameObject.ObjectSettings.VariantId, gameObject.Transform.IsStatic ? 1 : 2));
@@ -224,7 +224,7 @@ public class ItemSettingsContainer
     [Bond.Schema]
     public class ItemSettings0ObjectPhysics
     {
-        public ItemSettings0ObjectPhysics(PhysicsMode physicsMode, ushort unknown)
+        public ItemSettings0ObjectPhysics(PhysicsType physicsMode, ushort unknown)
         {
             ObjectPhysicsMode = (int)physicsMode;
             UnknownuUnSignedshort = unknown;
