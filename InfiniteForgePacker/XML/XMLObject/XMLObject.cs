@@ -72,7 +72,7 @@ public class XMLObject
 
         var forwardVec = Vector3.Zero;
         if (forwardRotation is not null)
-            upVec = new Vector3(forwardRotation.Value.x == null ? 0 : float.Parse(forwardRotation.Value.x.Value),
+            forwardVec = new Vector3(forwardRotation.Value.x == null ? 0 : float.Parse(forwardRotation.Value.x.Value),
                 forwardRotation.Value.y == null ? 0 : float.Parse(forwardRotation.Value.y.Value),
                 forwardRotation.Value.z == null ? 0 : float.Parse(forwardRotation.Value.z.Value));
 

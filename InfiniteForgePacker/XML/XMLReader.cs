@@ -29,13 +29,15 @@ public static class XMLReader
         if (type == "")
             throw new Exception($"Type is invalid {type}");
 
+        if (type == "Single") type = "float";
+
         var ret = id != -1 ? 
             (from el in parent.Elements(type)
                 where (string) el.Attribute("id") == id.ToString()
                 select el).FirstOrDefault() 
             : parent.Elements(type).FirstOrDefault();
 
-        if (ret == null && !createIfNull) return ret;
+        if (ret != null || (ret == null && !createIfNull)) return ret;
         return XMLWriter.WriteObjectToContainer(parent, type, id);
     }
     
