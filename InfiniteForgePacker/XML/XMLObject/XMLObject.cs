@@ -23,8 +23,9 @@ public class XMLObject
         var position = ReadObjectPosition(objectContainer);
         var rotation = ReadObjectRotation(objectContainer).Degrees;
         var scale = ReadObjectScale(objectContainer);
-        
-        return new XMLObject(new GameObject(null, (ObjectId)id, new Transform(position, rotation, isStatic, scale)));
+
+        return new XMLObject(new GameObject(null, (ObjectId)id,
+            new Transform(position, rotation, isStatic, scale: scale)));
     }
 
     public static int ReadObjectId(XContainer objectContainer)
@@ -72,7 +73,7 @@ public class XMLObject
 
         var forwardVec = Vector3.Zero;
         if (forwardRotation is not null)
-            upVec = new Vector3(forwardRotation.Value.x == null ? 0 : float.Parse(forwardRotation.Value.x.Value),
+            forwardVec = new Vector3(forwardRotation.Value.x == null ? 0 : float.Parse(forwardRotation.Value.x.Value),
                 forwardRotation.Value.y == null ? 0 : float.Parse(forwardRotation.Value.y.Value),
                 forwardRotation.Value.z == null ? 0 : float.Parse(forwardRotation.Value.z.Value));
 
@@ -98,11 +99,43 @@ public class XMLObject
             return null;
         
         var scaleList = XMLReader.GetXContainer(additionalDataStruct, "list", 23);
-        
+
+        //This has been hard coded to get reading statics only
         if (scaleList is null)
-            return null;
+        {
+            var scaleListDynamic = XMLReader.GetXContainer(additionalDataStruct, "list", 1);
+
+            if (scaleListDynamic != null)
+            {
+                return new Vector3(69420, 69420, 69420);
+            }
+            else
+            {
+                var scaleListDynamicExtra = XMLReader.GetXContainer(additionalDataStruct, "list", 24);
+
+                if (scaleListDynamicExtra == null) return null;
+
+                XElement dynamicVar = XMLReader.GetXElement(scaleListDynamicExtra.FirstNode as XContainer, typeof(float), 0);
+
+                if (dynamicVar == null) return null;
+
+                float dynamicVarVal = 0;
+                
+                if (float.TryParse(dynamicVar.Value, out dynamicVarVal))
+                {
+                    if (dynamicVarVal == 2)
+                    {
+                        return new Vector3(69420, 69420, 69420);
+                    }
+
+                    return null;
+                }
+
+                return null;
+            }
+        }
         
-        var scale = XMLReader.GetVector3(scaleList);
+        var scale = XMLReader.GetVector3(scaleList.FirstNode as XContainer);
 
         if (scale is null)
             return null;
